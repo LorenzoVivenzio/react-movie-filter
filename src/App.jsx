@@ -1,36 +1,51 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import film from './components/filmList'
+import films from './components/filmList'
 import "bootstrap/dist/css/bootstrap.css"
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [search, setSearch] = useState("")
+  const [filtedArray, setFiltedArray] = useState(films)
+
+  useEffect(() => {
+    const newArray = films.filter((film) => film.genre.includes(search));
+    setFiltedArray(newArray);
+  }, [search])
 
   return (
     <>
+
+      <header className='d-flex justify-content-evenly pt-3 pb-3 bg-primary-subtle'>
+        <h1>Film</h1>
+        <nav className="navbar ">
+          <div className="container-fluid">
+
+            <select
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              className="form-select"
+              aria-label="Default select example">
+              <option selected>Genere</option>
+                  <option selected>Romantico</option>
+                  <option selected>Thriller</option>
+                  <option selected>Azione</option>
+                  <option selected>Fantascienza</option>
+
+
+            </select>
+          </div>
+        </nav>
+      </header>
+
+
       <div className="container">
-        <header className='d-flex justify-content-between mt-3 mb-3'>
-          <h1>Film</h1>
-          <nav class="navbar ">
-            <div class="container-fluid">
-              <form 
-              class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                <button 
-                class="btn btn-outline-success" type="submit">Search</button>
-              </form>
-            </div>
-          </nav>
-        </header>
-
-
-
         <div className="row">
-          {film.map((film, index) => {
+          {filtedArray.map((film, index) => {
             return (
-              <div className="col-3 border mt-3 me-1">
+              <div key={index}
+                className="col-3 border mt-3 me-1">
                 <h2>{film.title}</h2>
                 <p>{film.genre}</p>
               </div>
